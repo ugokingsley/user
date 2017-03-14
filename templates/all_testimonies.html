@@ -5,14 +5,14 @@
 <!-- Main Content -->
 
         {% for obj in testimonies %}
-        {% paginate testimonies %}
+
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 <div class="post-preview">
                     <a href="post.html">
                         <h2 class="post-title">
                            <a href="/vote/?id={{ obj.id }}" class="vote"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-                            <a href="{{ obj.testimony.testimonies.testimony }}" class="title">{{ obj.title|escape }}</a>
+                            <a href="/testimony/{{ obj.testimonies.id }}" class="title">{{ obj.title|escape }}</a>
                         </h2>
 
                     </a>
@@ -28,7 +28,7 @@
                 <!-- Pager -->
                 <ul class="pager">
                     <li class="next">
-                        <a href="#">View Post &rarr;</a>
+                        <a href="/testimony/{{ obj.testimonies.id }}">View Post &rarr;</a>
                     </li>
                 </ul>
             </div>
@@ -36,7 +36,7 @@
 
         </div>
 {% endfor %}
-            {% show_pages %}
+
 
 {% else %}
 <p>No bookmarks found.</p>
