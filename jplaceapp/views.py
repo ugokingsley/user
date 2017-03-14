@@ -33,6 +33,17 @@ def home(request):
 def user_page(request, username):
     user = get_object_or_404(User, username=username)
     testimony = user.testimonies_set.order_by('-id')
+    context = {
+        'testimony': testimony,
+        'username': username,
+        'show_tags': True,
+    }
+    return render(request, 'user_page.html', context)
+
+'''
+def user_page(request, username):
+    user = get_object_or_404(User, username=username)
+    testimony = user.testimonies_set.order_by('-id')
     paginator = Paginator(testimony, ITEMS_PER_PAGE)
     try:
         page = int(request.GET['page'])
@@ -58,13 +69,16 @@ def user_page(request, username):
         'next_page': page + 1,
         'prev_page': page - 1
     }
-    return render(request, "user_page.html", context)
+    return render(request, 'user_page.html', context)
 
+'''
 
 def detail(request, testimonies_id):
     testimonies = get_object_or_404(Testimonies, pk=testimonies_id)
     context = {'testimonies': testimonies}
     return render(request,'detail.html',context)
+
+
 
 @login_required(login_url='/')
 def testimony_vote_page(request):
