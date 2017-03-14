@@ -10,7 +10,7 @@ class MyTestimony(models.Model):
     testimony = models.TextField(unique=True)
 
     def __unicode__(self):
-        return '%s' % (self.testimony)
+        return '%s' % self.testimony
 
     def __str__(self):
         return self.testimony
@@ -26,6 +26,19 @@ class Testimonies(models.Model):
 
     def __unicode__(self):
         return '%s, %s' % (self.user.username, self.testimonies.testimony)
+
+
+class UserFollowers(models.Model):
+    user = models.ForeignKey(User, unique=True)
+    date = models.DateTimeField(auto_now_add=True)
+    count = models.IntegerField(default=1)
+    followers = models.ManyToManyField(User, related_name='followers')
+
+    def __str__(self):
+        return '%s, %s' % (self.user, self.count)
+
+    def __unicode__(self):
+        return '%s, %s' % (self.user, self.count)
 
 
 class SharedTestimonies(models.Model):
