@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Search testimonies{% endblock %}
+{% block head %}Search testimonies{% endblock %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <form  id="search-form" method="GET" action=".">
+          {% csrf_token %}
+          {{ form | crispy }}
+        <input type="submit" class="btn btn-primary btn-block" value="search" />
+
+      </form>
+    </div>
+</div>
+
+<div id="search-results">
+    {% if show_results %}
+    {% include 'testimony_list.html' %}
+    {% endif %}
+</div>
+{% endblock %}

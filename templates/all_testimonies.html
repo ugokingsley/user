@@ -1,0 +1,43 @@
+{% load endless %}
+
+
+{% if testimonies %}
+<!-- Main Content -->
+
+        {% for obj in testimonies %}
+        {% paginate testimonies %}
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-preview">
+                    <a href="post.html">
+                        <h2 class="post-title">
+                           <a href="/vote/?id={{ obj.id }}" class="vote"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                            <a href="{{ obj.testimony.testimonies.testimony }}" class="title">{{ obj.title|escape }}</a>
+                        </h2>
+
+                    </a>
+                    <div>
+                        {{ obj.testimonies }}
+                    </div>
+                    <p class="post-meta">Posted by
+                        <a href="/user/{{ obj.user.username }}" class="username"> {{ obj.user.username }}</a> |
+        <span class="vote-count">Votes:{{ obj.votes }} |  <a href="/testimonies/testimony/{{ obj.id}}/">Comments</a>
+        </span> on September 24, 2014</p>
+                </div>
+
+                <!-- Pager -->
+                <ul class="pager">
+                    <li class="next">
+                        <a href="#">View Post &rarr;</a>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+{% endfor %}
+            {% show_pages %}
+
+{% else %}
+<p>No bookmarks found.</p>
+{% endif %}
