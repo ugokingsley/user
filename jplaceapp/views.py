@@ -252,7 +252,7 @@ def _testimonies_save(request, form):
 @login_required(login_url='/')
 def testimonies_save_page(request):
     if request.method == 'POST':
-        form = TestimonySaveForm(request.POST, request.FILES or None)
+        form = TestimonySaveForm(request.POST, request.FILES)
         if form.is_valid():
             testimonies = _testimonies_save(request, form)
             return HttpResponseRedirect('/user/%s/' % request.user.username)
