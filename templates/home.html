@@ -44,6 +44,13 @@
     <!--{% include 'shared_testimony_list.html' %}-->
     {% include 'all_testimonies.html' %}
   </div>
+
+{% for userFollower in userFollowers %}
+<div class="well">
+    <span class="username">{{ userFollower.user.username}}</span>
+    <span class="count text-muted"> ({{ userFollower.count}} followers)</span>
+</div>
+{% endfor %}
 {% if show_paginator %}
     <div class="paginator">
         {% if has_prev %}

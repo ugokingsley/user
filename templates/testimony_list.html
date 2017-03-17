@@ -24,7 +24,7 @@
             {% endif %}<br />
         {% endif %}
         {% if show_user %}
-            Posted by:<a href="/user/{{ obj.user.username }}/" class="username">{{ obj.user.username }}</a>
+            Posted by:<a href="/user/{{ obj.user.username }}/" class="username"><span class="glyphicon glyphicon-user"></span>{{ obj.user.username }}</a>
         {% endif %}
      </li>
     {% endfor %}

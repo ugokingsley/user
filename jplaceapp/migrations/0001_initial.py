@@ -20,14 +20,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='SharedTestimonies',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('date', models.DateTimeField(auto_now_add=True)),
-                ('votes', models.IntegerField(default=1)),
-            ],
-        ),
-        migrations.CreateModel(
             name='Tag',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -43,19 +35,29 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.CreateModel(
+            name='UserFollowers',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('date', models.DateTimeField(auto_now_add=True)),
+                ('count', models.IntegerField(default=1)),
+                ('followers', models.ManyToManyField(related_name='followers', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, unique=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='VoteTestimonies',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('date', models.DateTimeField(auto_now_add=True)),
+                ('votes', models.IntegerField(default=1)),
+                ('testimony', models.ForeignKey(to='jplaceapp.Testimonies', unique=True)),
+                ('users_voted', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
         migrations.AddField(
             model_name='tag',
             name='testimony',
             field=models.ManyToManyField(to='jplaceapp.Testimonies'),
-        ),
-        migrations.AddField(
-            model_name='sharedtestimonies',
-            name='testimony',
-            field=models.ForeignKey(to='jplaceapp.Testimonies', unique=True),
-        ),
-        migrations.AddField(
-            model_name='sharedtestimonies',
-            name='users_voted',
-            field=models.ManyToManyField(to=settings.AUTH_USER_MODEL),
         ),
     ]

@@ -3,8 +3,10 @@ from datetime import timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.serializers import json
 from django.db.models import Q
 from django.http import Http404
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -18,12 +20,12 @@ ITEMS_PER_PAGE = 1
 
 def home(request):
     title = "Welcome to Jplace"
-    shared_testimonies = SharedTestimonies.objects.order_by('-date')[:10]
+    #shared_testimonies = VoteTestimonies.objects.order_by('-date')[:10]
     testimonies = Testimonies.objects.all().order_by('-id')  # [:2]
     post_time = datetime.now()
     context = {
         "title": title,
-        "shared_testimonies": shared_testimonies,
+        #"shared_testimonies": shared_testimonies,
         "testimonies": testimonies,
 
     }
@@ -39,6 +41,7 @@ def user_page(request, username):
         'show_tags': True,
     }
     return render(request, 'user_page.html', context)
+
 
 '''
 def user_page(request, username):
@@ -73,19 +76,62 @@ def user_page(request, username):
 
 '''
 
+
 def detail(request, testimonies_id):
     testimonies = get_object_or_404(Testimonies, pk=testimonies_id)
-    context = {'testimonies': testimonies}
-    return render(request,'detail.html',context)
+    liked = False
+    if request.session.get('has_liked_' + str(testimonies_id), liked):
+        liked = True
+        print("liked {}_{}".format(liked, testimonies_id))
+    context = {
+        'testimonies': testimonies,
+        'liked': liked
+    }
+    return render(request, 'detail.html', context)
 
+'''
+def like_count_testimonies(request):
+    liked = False
+    if request.method == 'GET':
+        testimonies_id = request.GET.get['testimonies_id', '']
+        testimonies = Testimonies.objects.get(id=int(testimonies_id))
+        if request.session.get('has_liked_' + testimonies_id, liked):
+            print("unlike")
+            if testimonies.likes > 0:
+                likes = testimonies.likes - 1
+                try:
+                    del request.session['has_liked_' + testimonies_id]
+                except KeyError:
+                    print("keyerror")
+        else:
+            print("like")
+            request.session['has_liked_' + testimonies_id] = True
+            likes = testimonies.likes + 1
+    testimonies.likes = likes
+    testimonies.save()
+    return HttpResponse(likes, liked)
+'''
 
+def post(request, username):
+    follow = request.POST['follow']
+    user = User.objects.get(username=request.user.username)
+    user_profile = User.objects.get(username=username)
+    user_follower, status = UserFollowers.objects.get_or_create(user=user_profile)
+    if follow == 'true':
+        # follow user
+        user_follower.followers.add(user)
+    else:
+        # unfollow user
+        user_follower.followers.remove(user)
+    return HttpResponse(json.dumps(""), content_type="application/json")
 
+'''
 @login_required(login_url='/')
 def testimony_vote_page(request):
     if request.GET.has_key('id'):
         try:
             id = request.GET['id']
-            shared_testimonies = SharedTestimonies.objects.get(id=id)
+            shared_testimonies = VoteTestimonies.objects.get(id=id)
             user_voted = shared_testimonies.users_voted.filter(username=request.user.username)
             if not user_voted:
                 shared_testimonies.votes += 1
@@ -96,8 +142,7 @@ def testimony_vote_page(request):
     if request.META.has_key('HTTP_REFERER'):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
     return HttpResponseRedirect('/')
-
-
+'''
 def tag_page(request, tag_name):
     tag = get_object_or_404(Tag, name=tag_name)
     testimony = tag.testimony.order_by('-id')
@@ -159,7 +204,7 @@ def _testimonies_save(request, form):
 
      # Share on the main page if requested.
     if form.cleaned_data['share']:
-        shared_testimony, created = SharedTestimonies.objects.get_or_create(testimony=testimony)
+        shared_testimony, created = VoteTestimonies.objects.get_or_create(testimony=testimony)
         if created:
             shared_testimony.users_voted.add(request.user)
             shared_testimony.save()
@@ -174,14 +219,14 @@ def _testimonies_save(request, form):
     testimony, dummy = MyTestimony.objects.get_or_create(
         testimony=form.cleaned_data['testimony']
     )
-    # Create or get bookmark.
+    # Create or get testimony.
     testimonies, created = Testimonies.objects.get_or_create(
         user=request.user,
         testimonies=testimony,
     )
-    # Update bookmark title.
+    # Update testimony title.
     testimonies.title = form.cleaned_data['title']
-    # If the bookmark is being updated, clear old tag list.
+    # If the testimony is being updated, clear old tag list.
     if not created:
         testimonies.tag_set.clear()
     # Create new tag list.
@@ -192,7 +237,7 @@ def _testimonies_save(request, form):
 
         # Share on the main page if requested.
         # if form.cleaned_data['share']:
-        # shared_testimony, created = SharedTestimonies.objects.get_or_create(testimony=testimony)
+        # shared_testimony, created = VoteTestimonies.objects.get_or_create(testimony=testimony)
         # if created:
         #   shared_testimony.users_voted.add(request.user)
         # shared_testimony.save()
@@ -201,11 +246,13 @@ def _testimonies_save(request, form):
     return testimonies
 
 
+
+
 @csrf_exempt
 @login_required(login_url='/')
 def testimonies_save_page(request):
     if request.method == 'POST':
-        form = TestimonySaveForm(request.POST)
+        form = TestimonySaveForm(request.POST, request.FILES or None)
         if form.is_valid():
             testimonies = _testimonies_save(request, form)
             return HttpResponseRedirect('/user/%s/' % request.user.username)
@@ -306,7 +353,7 @@ def search_page(request):
 def popular_page(request):
     today = datetime.today()
     yesterday = today - timedelta(1)
-    shared_testimonies = SharedTestimonies.objects.filter(date__gt=yesterday)
+    shared_testimonies = VoteTestimonies.objects.filter(date__gt=yesterday)
     shared_testimonies = shared_testimonies.order_by('-votes')[:10]
     context = {
         'shared_testimonies': shared_testimonies

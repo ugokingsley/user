@@ -1,6 +1,6 @@
-{% if shared_testimonies %}
+{% if votetestimonies %}
 <ul class="bookmarks">
-    {% for obj in shared_testimonies %}
+    {% for obj in votetestimonies %}
     <li>
          <a href="/vote/?id={{ obj.id }}" class="vote"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
         <a href="{{ obj.testimony.testimonies.testimony }}" class="title">{{ obj.testimony.title|escape }}</a>

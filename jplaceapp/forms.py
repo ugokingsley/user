@@ -11,6 +11,11 @@ class TestimonySaveForm(forms.Form):
         widget=forms.TextInput(attrs={'size': 64})
     )
 
+    image = forms.FileField(
+        label='image'
+
+    )
+
     testimony = forms.CharField(
         label='Testimony',
         widget=forms.Textarea(attrs={'id': 'ck'})

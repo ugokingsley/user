@@ -1,10 +1,8 @@
 
-
+{% load likes_inclusion_tags %}
 
 {% if testimonies %}
 <!-- Main Content -->
-
-
 
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -14,15 +12,22 @@
                            <a href="/vote/?id={{ obj.id }}" class="vote"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
                             <a href="testimony{{testimonies.id }}" class="title">{{ testimonies.title|escape }}</a>
                         </h2>
-
                     </a>
                     <div>
                         {{ testimonies.testimonies }}
                     </div>
-                    <p class="post-meta">Posted by
-                        <a href="/user/{{ obj.user.username }}" class="username"> {{ testimonies.user.username }}</a> |
-        <span class="vote-count">Votes:{{ obj.votes }} |  <a href="/testimonies/testimony/{{ obj.id}}/">Comments</a>
-        </span> on September 24, 2014</p>
+                    <div class="post-meta">Posted by
+                        <a href="/user/{{ user.username }}" class="username"><span class="glyphicon glyphicon-user"> </span>
+                            &nbsp; {{ testimonies.user.username }}</a> |
+                        {% if testimonies.user.username != user.username %}
+                            <span class="btn btn-xs btn-default follow-btn" title="Click to follow {{ profile.username }}" value="{{ following }}"
+                                username="{{ profile.username }}">
+                                <span class="glyphicon glyphicon-plus"></span><span class="follow-text">{{ following|yesno:"Unfollow,Follow" }}</span>
+                            </span>
+                        {% endif %}
+
+                        <span class="vote-count"> |  <a href="/testimonies/testimony/{{ obj.id}}/">Comments</a></span> on September 24, 2014 <span >{% likes testimonies %}</span>
+                    </div>
                 </div>
 
             </div>

@@ -44,6 +44,8 @@ INSTALLED_APPS = (
     'ckeditor',
     'endless_pagination',
     'ckeditor_uploader',
+    'likes',
+    'secretballot',
     #'django_comments',
     'django_wysiwyg',
     #my apps
@@ -60,6 +62,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    "likes.middleware.SecretBallotUserIpUseragentMiddleware",
 )
 
 ROOT_URLCONF = 'jplace.urls'
@@ -154,5 +157,6 @@ EMAIL_HOST_PASSWORD = 'kingsley5911'
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
+    "django.core.context_processors.request",
 )
 
