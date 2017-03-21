@@ -18,7 +18,7 @@
                     </a>
                     <div>
                         <img src="{{obj.image.url}}" class="img-responsive"/>
-                        {{ obj.testimonies }}
+                        {{ obj.testimonies | linebreaks | truncatechars:200}}
                     </div>
                     <p class="post-meta">Posted by
                         <a href="/user/{{ obj.user.username }}" class="username"> {{ obj.user.username }}</a> |

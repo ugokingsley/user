@@ -22,7 +22,8 @@ def home(request):
     title = "Welcome to Jplace"
     testimonies_list = Testimonies.objects.all().order_by('-id')  # [:2]
     paginator = Paginator(testimonies_list, 1)
-    page = request.GET.get('page')
+    page_request_var = "all_testimonies"
+    page = request.GET.get(page_request_var)
     try:
         testimonies = paginator.page(page)
     except PageNotAnInteger:
@@ -35,7 +36,7 @@ def home(request):
     context = {
         "title": title,
         "testimonies": testimonies,
-
+        "page_request_var":page_request_var,
     }
     return render(request, "home.html", context)
 
@@ -44,7 +45,8 @@ def user_page(request, username):
     user = get_object_or_404(User, username=username)
     testimony_list = user.testimonies_set.order_by('-id')
     paginator = Paginator(testimony_list, 1)
-    page = request.GET.get('page')
+    page_request_var = "user_testimonies"
+    page = request.GET.get(page_request_var)
     try:
         testimony = paginator.page(page)
     except PageNotAnInteger:
@@ -57,6 +59,7 @@ def user_page(request, username):
         'testimony': testimony,
         'username': username,
         'show_tags': True,
+        "page_request_var": page_request_var,
     }
     return render(request, 'user_page.html', context)
 

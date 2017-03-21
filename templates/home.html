@@ -56,13 +56,13 @@
     <div class="pagination">
         <span class="step-links">
             {% if testimonies.has_previous %}
-                <a href="?page={{ testimonies.previous_page_number }}">&laquo; Previous</a>
+                <a href="?{{page_request_var}}={{ testimonies.previous_page_number }}">&laquo; Previous</a>
             {% endif %}
             <span class="current">
                 page {{ testimonies.number }} of {{ testimonies.paginator.num_pages }}
             </span>
             {% if testimonies.has_next %}
-                <a href="?page={{ testimonies.next_page_number  }}">Next &raquo;</a>
+                <a href="?{{page_request_var}}={{ testimonies.next_page_number  }}">Next &raquo;</a>
             {% endif %}
 
         </span>
