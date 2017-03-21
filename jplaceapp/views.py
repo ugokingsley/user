@@ -12,20 +12,28 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .forms import *
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import jplaceapp.models
 
-ITEMS_PER_PAGE = 1
+
 
 
 def home(request):
     title = "Welcome to Jplace"
-    #shared_testimonies = VoteTestimonies.objects.order_by('-date')[:10]
-    testimonies = Testimonies.objects.all().order_by('-id')  # [:2]
-    post_time = datetime.now()
+    testimonies_list = Testimonies.objects.all().order_by('-id')  # [:2]
+    paginator = Paginator(testimonies_list, 1)
+    page = request.GET.get('page')
+    try:
+        testimonies = paginator.page(page)
+    except PageNotAnInteger:
+        #if page is not an integer, deliver first page
+        testimonies = paginator.page(1)
+    except EmptyPage:
+        #if page is out of range, deliver last page of result
+        testimonies = paginator.page(paginator.num_pages)
+
     context = {
         "title": title,
-        #"shared_testimonies": shared_testimonies,
         "testimonies": testimonies,
 
     }
@@ -34,7 +42,17 @@ def home(request):
 
 def user_page(request, username):
     user = get_object_or_404(User, username=username)
-    testimony = user.testimonies_set.order_by('-id')
+    testimony_list = user.testimonies_set.order_by('-id')
+    paginator = Paginator(testimony_list, 1)
+    page = request.GET.get('page')
+    try:
+        testimony = paginator.page(page)
+    except PageNotAnInteger:
+        # if page is not an integer, deliver first page
+        testimony = paginator.page(1)
+    except EmptyPage:
+        # if page is out of range, deliver last page of result
+        testimony = paginator.page(paginator.num_pages)
     context = {
         'testimony': testimony,
         'username': username,

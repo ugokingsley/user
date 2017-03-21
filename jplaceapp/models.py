@@ -22,6 +22,8 @@ class Testimonies(models.Model):
     user = models.ForeignKey(User)
     testimonies = models.ForeignKey(MyTestimony)
     likes = models.PositiveIntegerField(default=0)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=False)
+    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     @property
     def total_likes(self):

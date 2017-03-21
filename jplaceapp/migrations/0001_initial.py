@@ -31,6 +31,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=200)),
+                ('image', models.FileField(null=True, upload_to=b'', blank=True)),
+                ('likes', models.PositiveIntegerField(default=0)),
+                ('updated', models.DateTimeField(auto_now=True)),
+                ('timestamp', models.DateTimeField(auto_now_add=True)),
                 ('testimonies', models.ForeignKey(to='jplaceapp.MyTestimony')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],

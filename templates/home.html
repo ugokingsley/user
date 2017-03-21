@@ -51,16 +51,22 @@
     <span class="count text-muted"> ({{ userFollower.count}} followers)</span>
 </div>
 {% endfor %}
-{% if show_paginator %}
-    <div class="paginator">
-        {% if has_prev %}
-            <a href="?page={{ prev_page }}">&laquo; Previous</a>
-        {% endif %}
-        {% if has_next %}
-            <a href="?page={{ next_page }}">Next &raquo;</a>
-        {% endif %}
-        (Page {{ page }} of {{ pages }})
+<div class="container">
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if testimonies.has_previous %}
+                <a href="?page={{ testimonies.previous_page_number }}">&laquo; Previous</a>
+            {% endif %}
+            <span class="current">
+                page {{ testimonies.number }} of {{ testimonies.paginator.num_pages }}
+            </span>
+            {% if testimonies.has_next %}
+                <a href="?page={{ testimonies.next_page_number  }}">Next &raquo;</a>
+            {% endif %}
+
+        </span>
     </div>
-{% endif %}
+</div>
 {% endblock %}
 
