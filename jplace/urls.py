@@ -24,7 +24,8 @@ urlpatterns = [
     url(r'^tag/([^\s]+)/$','jplaceapp.views.tag_page', name='tag_page'),
     #url(r'^vote/$', 'jplaceapp.views.testimony_vote_page', name='testimony_vote_page'),
     url(r'^testimony/(?P<testimonies_id>[0-9]+)/$','jplaceapp.views.detail',name='detail'),
-    #url(r'^comments/', include('django_comments.urls')),
+    #user following
+    url(r'^friendship/', include('friendship.urls')),
     #user registration
     url(r'^accounts/', include('registration.backends.default.urls')),
 

@@ -38,6 +38,7 @@ class Testimonies(models.Model):
 secretballot.enable_voting_on(Testimonies)
 
 
+'''
 class UserFollowers(models.Model):
     user = models.ForeignKey(User, unique=True)
     date = models.DateTimeField(auto_now_add=True)
@@ -49,7 +50,7 @@ class UserFollowers(models.Model):
 
     def __unicode__(self):
         return '%s, %s' % (self.user, self.count)
-
+'''
 
 class VoteTestimonies(models.Model):
     testimony = models.ForeignKey(Testimonies, unique=True)

@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'ckeditor_uploader',
     'likes',
     'secretballot',
+    'friendship',
     #'django_comments',
     'django_wysiwyg',
     #my apps

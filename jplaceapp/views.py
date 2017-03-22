@@ -14,8 +14,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import *
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import jplaceapp.models
-
-
+from django.contrib.auth.models import User
+from friendship.models import Friend, Follow
 
 
 def home(request):
@@ -27,16 +27,16 @@ def home(request):
     try:
         testimonies = paginator.page(page)
     except PageNotAnInteger:
-        #if page is not an integer, deliver first page
+        # if page is not an integer, deliver first page
         testimonies = paginator.page(1)
     except EmptyPage:
-        #if page is out of range, deliver last page of result
+        # if page is out of range, deliver last page of result
         testimonies = paginator.page(paginator.num_pages)
 
     context = {
         "title": title,
         "testimonies": testimonies,
-        "page_request_var":page_request_var,
+        "page_request_var": page_request_var,
     }
     return render(request, "home.html", context)
 
@@ -62,6 +62,29 @@ def user_page(request, username):
         "page_request_var": page_request_var,
     }
     return render(request, 'user_page.html', context)
+
+
+def detail(request, testimonies_id):
+    testimonies = get_object_or_404(Testimonies, pk=testimonies_id)
+    liked = False
+    if request.session.get('has_liked_' + str(testimonies_id), liked):
+        liked = True
+        print("liked {}_{}".format(liked, testimonies_id))
+    context = {
+        'testimonies': testimonies,
+        'liked': liked
+    }
+    return render(request, 'detail.html', context)
+
+
+def follow(request, username):
+    other_user = User.objects.get(User, username=username)
+    # Create request.user follows other_user relationship
+    following_created = Follow.objects.add_follower(request.user, other_user)
+    # List of this user's followers
+    all_followers = Follow.objects.followers(request.user)
+    # List of who this user is following
+    following = Follow.objects.following(request.user)
 
 
 '''
@@ -97,19 +120,6 @@ def user_page(request, username):
 
 '''
 
-
-def detail(request, testimonies_id):
-    testimonies = get_object_or_404(Testimonies, pk=testimonies_id)
-    liked = False
-    if request.session.get('has_liked_' + str(testimonies_id), liked):
-        liked = True
-        print("liked {}_{}".format(liked, testimonies_id))
-    context = {
-        'testimonies': testimonies,
-        'liked': liked
-    }
-    return render(request, 'detail.html', context)
-
 '''
 def like_count_testimonies(request):
     liked = False
@@ -131,7 +141,7 @@ def like_count_testimonies(request):
     testimonies.likes = likes
     testimonies.save()
     return HttpResponse(likes, liked)
-'''
+
 
 def post(request, username):
     follow = request.POST['follow']
@@ -145,7 +155,7 @@ def post(request, username):
         # unfollow user
         user_follower.followers.remove(user)
     return HttpResponse(json.dumps(""), content_type="application/json")
-
+'''
 '''
 @login_required(login_url='/')
 def testimony_vote_page(request):
@@ -164,6 +174,8 @@ def testimony_vote_page(request):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
     return HttpResponseRedirect('/')
 '''
+
+
 def tag_page(request, tag_name):
     tag = get_object_or_404(Tag, name=tag_name)
     testimony = tag.testimony.order_by('-id')
@@ -265,8 +277,6 @@ def _testimonies_save(request, form):
     # Save bookmark to database.
     testimonies.save()
     return testimonies
-
-
 
 
 @csrf_exempt
