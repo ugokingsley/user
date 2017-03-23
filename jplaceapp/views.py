@@ -18,6 +18,17 @@ from django.contrib.auth.models import User
 from friendship.models import Friend, Follow
 
 
+def index(request):
+    testimonies = Testimonies.objects.all().order_by('-id')  # [:2]
+
+    context = {
+
+        "testimonies": testimonies,
+
+    }
+    return render(request, "index.html", context)
+
+
 def home(request):
     title = "Welcome to Jplace"
     testimonies_list = Testimonies.objects.all().order_by('-id')  # [:2]
@@ -77,8 +88,8 @@ def detail(request, testimonies_id):
     return render(request, 'detail.html', context)
 
 
-def follow(request, username):
-    other_user = User.objects.get(User, username=username)
+def follow(request):
+    other_user = User.objects.get(pk=1)
     # Create request.user follows other_user relationship
     following_created = Follow.objects.add_follower(request.user, other_user)
     # List of this user's followers

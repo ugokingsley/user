@@ -1,0 +1,77 @@
+{% load friendshiptags %}
+{% load endless %}
+
+
+{% if testimonies %}
+<!-- Main Content -->
+
+<div class="container">
+		<div class="row">
+
+
+
+        {% for obj in testimonies %}
+
+			<div class="col-md-8">
+				<div class="main-col">
+					<div class="block">
+
+						<div class="clearfix"></div><hr/>
+						<ul id="topics">
+							<li class="topics">
+								<div class="row">
+									<div class="col-md-2">
+										<img src="{{obj.image.url}}" class="img-responsive"/>
+									</div>
+									<div class="col-md-10">
+										<div class="topic-content pull-right">
+											<h3><a href="/vote/?id={{ obj.id }}" class="vote"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                            <a href="/testimony/{{ obj.testimonies.id }}" class="title">{{ obj.title|escape }}</a></h3>
+											<div class="topic-info">
+												 {{ obj.testimonies | linebreaks | truncatechars:200}}
+
+												<span class="badge pull-right">5</span>
+                                                <ul class="pager">
+                                                    <li class="next">
+                                                        <a href="/testimony/{{ obj.testimonies.id }}">View Post &rarr;</a>
+                                                    </li>
+                                                </ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<p class="post-meta">Posted by
+                        <a href="/user/{{ obj.user.username }}" class="username"> {{ obj.user.username }}</a> |
+        <span class="vote-count">Votes:{{ obj.votes }} |  <a href="/testimonies/testimony/{{ obj.id}}/">Comments</a>
+        </span> on {{ obj.timestamp }}</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="sidebar">
+
+					<div class="block">
+						<h3>Categories</h3>
+						<div class="list-group">
+							<a href="#" class="list-group-item active" >All Topics<span class="badge pull-right">145</span></a>
+							<a href="#" class="list-group-item" >Design<span class="badge pull-right">25</span></a>
+							<a href="#" class="list-group-item" >Development<span class="badge pull-right">45</span></a>
+							<a href="#" class="list-group-item" >Business & Marketing<span class="badge pull-right">45</span></a>
+							<a href="#" class="list-group-item" >Search Engines <span class="badge pull-right">45</span></a>
+							<a href="#" class="list-group-item" >Cloud & Hosting<span class="badge pull-right">45</span></a>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div><!-- /.container -->
+
+
+{% endfor %}
+
+
+{% else %}
+<p>No bookmarks found.</p>
+{% endif %}
