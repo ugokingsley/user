@@ -1,4 +1,5 @@
 body {
+  padding-top: 60px;
   background:#f4f4f4;
   font-size:15px;
 }
@@ -27,6 +28,7 @@ a{
 	background:#5c5b69;
 	border:0;
 	margin-bottom:30px;
+
  }
  
  .navbar-inverse .navbar-nav > li >a, .navbar-inverse .navbar-brand{
@@ -44,6 +46,9 @@ a{
  }
 
 
+.jumbotron{
+    margin-top:0px;
+}
  
  .block{
 	background:#fff;
