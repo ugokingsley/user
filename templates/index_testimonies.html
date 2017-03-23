@@ -6,13 +6,12 @@
 <!-- Main Content -->
 
 <div class="container">
+
 		<div class="row">
 
 
-
-        {% for obj in testimonies %}
-
 			<div class="col-md-8">
+				{% for obj in testimonies %}
 				<div class="main-col">
 					<div class="block">
 
@@ -48,6 +47,7 @@
         </span> on {{ obj.timestamp }}</p>
 					</div>
 				</div>
+				{% endfor %}
 			</div>
 			<div class="col-md-4">
 				<div class="sidebar">
@@ -65,11 +65,13 @@
 					</div>
 				</div>
 			</div>
+
 		</div>
+
     </div><!-- /.container -->
 
 
-{% endfor %}
+
 
 
 {% else %}
