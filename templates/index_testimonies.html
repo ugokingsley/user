@@ -24,12 +24,11 @@
 									</div>
 									<div class="col-md-10">
 										<div class="topic-content pull-right">
-											<h3><a href="/vote/?id={{ obj.id }}" class="vote"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-                            <a href="/testimony/{{ obj.testimonies.id }}" class="title">{{ obj.title|escape }}</a></h3>
+											<h3><a href="/vote/?id={{ obj.id }}" class="vote">{{ obj.title|escape }}</a></h3>
 											<div class="topic-info">
 												 {{ obj.testimonies | linebreaks | truncatechars:200}}
 
-												<span class="badge pull-right">5</span>
+												<span class="badge pull-right"><a href="/vote/?id={{ obj.id }}" class="vote"><i class="fa fa-thumbs-up" aria-hidden="true" style="color:white"></i></a></span>
                                                 <ul class="pager">
                                                     <li class="next">
                                                         <a href="/testimony/{{ obj.testimonies.id }}">View Post &rarr;</a>
@@ -52,11 +51,12 @@
 
 
 			<div class="col-md-4" >
-				<div class="well sidebar-nav sidebar-nav-fixed">
+				<div class="well sidebar-nav sidebar-nav-fixed" id="afix">
 
 					<div class="block">
 						<h3>Categories</h3>
 						<div class="list-group">
+
 							<a href="#" class="list-group-item active" >All Topics<span class="badge pull-right">145</span></a>
 							<a href="#" class="list-group-item" >Design<span class="badge pull-right">25</span></a>
 							<a href="#" class="list-group-item" >Development<span class="badge pull-right">45</span></a>
