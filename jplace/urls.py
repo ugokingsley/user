@@ -23,7 +23,7 @@ urlpatterns = [
     #user
     url(r'^user/(\w+)/$', 'jplaceapp.views.user_page', name='user_page'),
     url(r'^tag/([^\s]+)/$','jplaceapp.views.tag_page', name='tag_page'),
-    #url(r'^vote/$', 'jplaceapp.views.testimony_vote_page', name='testimony_vote_page'),
+    url(r'^vote/$', 'jplaceapp.views.testimony_vote_page', name='testimony_vote_page'),
     url(r'^testimony/(?P<testimonies_id>[0-9]+)/$','jplaceapp.views.detail',name='detail'),
     #user following
     url(r'^friendship/', include('friendship.urls')),

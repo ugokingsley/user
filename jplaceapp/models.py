@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 import secretballot
 
+
 # from ckeditor_uploader.fields import RichTextUploadingField
 
 
@@ -18,7 +19,7 @@ class MyTestimony(models.Model):
 
 class Testimonies(models.Model):
     title = models.CharField(max_length=200)
-    image = models.FileField(null=True,blank=True)
+    image = models.FileField(null=True, blank=True)
     user = models.ForeignKey(User)
     testimonies = models.ForeignKey(MyTestimony)
     likes = models.PositiveIntegerField(default=0)
@@ -35,8 +36,8 @@ class Testimonies(models.Model):
     def __unicode__(self):
         return '%s, %s' % (self.user.username, self.testimonies.testimony)
 
-secretballot.enable_voting_on(Testimonies)
 
+secretballot.enable_voting_on(Testimonies)
 
 '''
 class UserFollowers(models.Model):
@@ -51,6 +52,7 @@ class UserFollowers(models.Model):
     def __unicode__(self):
         return '%s, %s' % (self.user, self.count)
 '''
+
 
 class VoteTestimonies(models.Model):
     testimony = models.ForeignKey(Testimonies, unique=True)

@@ -88,6 +88,24 @@ def detail(request, testimonies_id):
     return render(request, 'detail.html', context)
 
 
+@login_required(login_url='/')
+def testimony_vote_page(request):
+    if request.GET.has_key('id'):
+        try:
+            id = request.GET['id']
+            vote_testimonies = VoteTestimonies.objects.get(id=id)
+            user_voted = vote_testimonies.users_voted.filter(username=request.user.username)
+            if not user_voted:
+                vote_testimonies.votes += 1
+                vote_testimonies.users_voted.add(request.user)
+                vote_testimonies.save()
+        except ObjectDoesNotExist:
+            raise Http404('Testimony not found.')
+    if request.META.has_key('HTTP_REFERER'):
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    return HttpResponseRedirect('/')
+
+
 def follow(request):
     other_user = User.objects.get(pk=1)
     # Create request.user follows other_user relationship
@@ -166,24 +184,6 @@ def post(request, username):
         # unfollow user
         user_follower.followers.remove(user)
     return HttpResponse(json.dumps(""), content_type="application/json")
-'''
-'''
-@login_required(login_url='/')
-def testimony_vote_page(request):
-    if request.GET.has_key('id'):
-        try:
-            id = request.GET['id']
-            shared_testimonies = VoteTestimonies.objects.get(id=id)
-            user_voted = shared_testimonies.users_voted.filter(username=request.user.username)
-            if not user_voted:
-                shared_testimonies.votes += 1
-                shared_testimonies.users_voted.add(request.user)
-                shared_testimonies.save()
-        except ObjectDoesNotExist:
-            raise Http404('Testimony not found.')
-    if request.META.has_key('HTTP_REFERER'):
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
-    return HttpResponseRedirect('/')
 '''
 
 
