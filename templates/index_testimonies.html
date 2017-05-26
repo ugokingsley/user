@@ -41,7 +41,8 @@
 							</li>
 						</ul>
 						<p class="post-meta">Posted by
-                        <a href="/user/{{ obj.user.username }}" class="username"> {{ obj.user.username }}</a> |
+                        <a href="/user/{{ obj.user.username }}" class="username"> {{ obj.user.username }}</a> | <li>Location: {{ obj.user.profile.location }}</li>
+  <li>Birth Date: {{ obj.user.profile.birth_date }}</li>
         <span class="vote-count">Votes:{{ obj.votes }} |  <a href="/testimonies/testimony/{{ obj.id}}/">Comments</a>
         </span> on {{ obj.timestamp }}</p>
 					</div>

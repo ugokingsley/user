@@ -1,9 +1,48 @@
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.db import models
 import secretballot
-
+from registration.signals import user_registered
 
 # from ckeditor_uploader.fields import RichTextUploadingField
+'''
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(max_length=500, blank=True)
+    location = models.CharField(max_length=30, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+'''
+
+
+class ExUserProfile(models.Model):
+    user = models.ForeignKey(User, unique=True)
+    picture = models.ImageField(upload_to = 'pic_folder/', default = 'pic_folder/None/no-img.jpg')
+    bio =  models.TextField(unique=True, default=None)
+
+    def __unicode__(self):
+        return self.user
+
+
+def user_registered_callback(sender, user, request, **kwargs):
+    profile = ExUserProfile(user=user)
+    profile.picture = request.POST["picture"]
+    profile.bio = request.POST["bio"]
+    profile.save()
+
+user_registered.connect(user_registered_callback)
 
 
 

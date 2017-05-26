@@ -1,8 +1,27 @@
+from registration.forms import RegistrationForm
 from django import forms
 from django.contrib.auth.models import User
 
 
 from .models import *
+
+
+
+
+class ExRegistrationForm(RegistrationForm):
+    testimony = forms.CharField(
+        label='bio',
+        widget=forms.Textarea(attrs={'id': 'ck'})
+    )
+    picture = forms.ImageField(
+        label='picture'
+
+    )
+
+
+
+
+
 
 
 class TestimonySaveForm(forms.Form):

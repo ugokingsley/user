@@ -2,6 +2,10 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from jplaceapp.forms import ExRegistrationForm
+from registration.backends.default.views import RegistrationView
+
+
 
 urlpatterns = [
     # Examples:
@@ -28,6 +32,7 @@ urlpatterns = [
     #user following
     url(r'^friendship/', include('friendship.urls')),
     #user registration
+    url(r'accounts/register/$', RegistrationView.as_view(form_class=ExRegistrationForm), name='registration_register'),
     url(r'^accounts/', include('registration.backends.default.urls')),
 
 ]
